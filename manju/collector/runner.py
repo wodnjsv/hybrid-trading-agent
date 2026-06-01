@@ -10,6 +10,8 @@ from manju.kis.ws import KISWebSocket
 from manju.kis.parse import parse_frame
 from manju.collector.subscriber import plan_changes
 from manju.collector.recorder import Recorder
+from manju.collector.compact import compact_date
+from manju.collector.keepawake import keep_awake
 
 logger = logging.getLogger(__name__)
 
@@ -58,12 +60,23 @@ async def run(cfg: Config) -> None:
         )
     finally:
         recorder.flush()
+        # 정상 종료(Ctrl+C 포함) 시 그날 shard들을 종목당 1파일로 병합 → 수동 복사 용이
+        for d in sorted(recorder.dates_written):
+            try:
+                n = compact_date(cfg.data_dir, d)
+                logger.info("compacted %s: %d symbol-file(s)", d, n)
+            except Exception as e:                       # noqa: BLE001
+                logger.warning("compaction failed for %s: %s", d, e)
 
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)s %(name)s %(message)s")
-    asyncio.run(run(Config.load()))
+    with keep_awake():
+        try:
+            asyncio.run(run(Config.load()))
+        except KeyboardInterrupt:
+            logger.info("수집기 중지됨 (Ctrl+C)")
 
 
 if __name__ == "__main__":

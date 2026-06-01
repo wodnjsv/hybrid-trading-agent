@@ -14,11 +14,13 @@ class Recorder:
         self._seq = 0
         # (kind, date, symbol) -> list[dict rows]
         self._buf: dict[tuple, list[dict]] = defaultdict(list)
+        self.dates_written: set[str] = set()   # 종료 시 컴팩션 대상 날짜
 
     def record(self, event) -> None:
         kind = "ticks" if isinstance(event, Trade) else "quotes"
         date = event.market_ts.strftime("%Y-%m-%d")
         self._buf[(kind, date, event.symbol)].append(event.to_row())
+        self.dates_written.add(date)
 
     def flush(self) -> None:
         if not self._buf:

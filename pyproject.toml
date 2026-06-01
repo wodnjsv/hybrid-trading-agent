@@ -1,3 +1,11 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# 패키지를 명시 선언 — 루트의 노트 폴더(mdfile 등)가 자동탐색을 깨뜨리지 않게
+packages = ["manju", "manju.kis", "manju.collector", "manju.replay"]
+
 [project]
 name = "manju"
 version = "0.0.0"
@@ -11,6 +19,7 @@ dependencies = [
 
 [project.scripts]
 manju-collect = "manju.collector.runner:main"
+manju-compact = "manju.collector.compact:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
