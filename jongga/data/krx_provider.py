@@ -16,6 +16,8 @@ _NUM = ["open", "high", "low", "close", "volume", "value", "marketcap", "shares"
 
 
 def parse_daily(rows: list[dict]) -> pd.DataFrame:
+    if not rows:                       # 휴장일/일시적 빈 응답 → 빈 프레임(호출측이 skip)
+        return pd.DataFrame(columns=[c for c in _FIELDS.values() if c != "ticker"])
     df = pd.DataFrame(rows)[list(_FIELDS)].rename(columns=_FIELDS)
     for c in _NUM:
         df[c] = pd.to_numeric(df[c].astype(str).str.replace(",", ""), errors="coerce")

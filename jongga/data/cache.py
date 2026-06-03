@@ -13,6 +13,7 @@ def load_or_fetch(path: Path, fetch: Callable[[], pd.DataFrame]) -> pd.DataFrame
     if path.exists():
         return pd.read_parquet(path)
     df = fetch()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(path)
+    if len(df):                        # 빈 결과(휴장/일시적 오류)는 캐시하지 않음
+        path.parent.mkdir(parents=True, exist_ok=True)
+        df.to_parquet(path)
     return df

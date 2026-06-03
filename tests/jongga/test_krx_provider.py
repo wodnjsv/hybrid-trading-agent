@@ -11,3 +11,9 @@ def test_parse_daily_normalizes_strings():
     assert df.loc["060310", "open"] == 3210
     assert df.loc["060310", "marketcap"] == 160170918600
     assert df.loc["060310", "sect"] == "중견기업부"
+
+
+def test_parse_daily_empty_returns_empty_frame():
+    df = parse_daily([])              # 휴장일/빈 응답
+    assert len(df) == 0
+    assert "close" in df.columns
