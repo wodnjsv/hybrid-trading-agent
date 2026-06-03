@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 .venv/
 data/
+!jongga/data/
 secrets.yaml
 *.parquet
 *.egg-info/
