@@ -48,9 +48,9 @@
  3. PaperLog          진입=close[d]로 LLM 페이퍼 바스켓 기록 + 재료/웹검색 스냅샷 보존
                       + 같은 날 '룰 baseline' 바스켓(수급+추세+끝물회피 상위 K)도 기록   [기록]
 
-■ 익일 시가 후 (≈09:10)  CLI: jongga-forward-morn  [d의 미정산분]
- 4. Settle            open[d+1] 조회 → 종목별 오버나잇 net(−매도세−수수료−슬리피지밴드)
-                      → LLM·baseline 양쪽 실현손익 기록·확정                         [정산]
+■ 익일(d+1) 마감 후  CLI: jongga-forward-morn  [d의 미정산분]
+ 4. Settle            d+1 EOD 바의 open[d+1] 조회 → 종목별 오버나잇 net(−매도세−수수료−슬리피지밴드)
+                      → LLM·baseline 양쪽 실현손익 기록·확정  (KRX 일별매매정보는 마감 후 확정 → d+1 마감 후 실행) [정산]
 
 ■ 누적 리포트  CLI: jongga-forward-report
  5. A/B 통계: LLM net vs baseline net (paired), 시장별(KOSPI/KOSDAQ), 비용밴드별, 유의성
@@ -76,7 +76,7 @@
 ```
 저녁 d   ① KRX(가격·수급)로 후보 shortlist(정량) → ② GPT-5.4 웹검색 재료선별(0~K)
         → ③ 페이퍼북에 진입=close[d] 기록 (LLM 바스켓 + 룰 baseline 바스켓 + 재료 스냅샷)
-아침 d+1 ④ KRX open[d+1] → 미정산 포지션 net 계산·확정 (LLM·baseline)
+d+1 마감후 ④ d+1 EOD 바의 open[d+1] → 미정산 포지션 net 계산·확정 (LLM·baseline)
 주기적   ⑤ 페이퍼북 → A/B 리포트(net>0? LLM>baseline? 시장별·비용밴드·유의성)
 ```
 

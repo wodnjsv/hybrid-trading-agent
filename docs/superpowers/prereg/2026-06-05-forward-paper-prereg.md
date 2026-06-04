@@ -33,5 +33,5 @@
 - 진입 = 확정 `close[d]`, 청산 = `open[d+1]`(1차). 다중호라이즌(`close[d+1]`/`close[d+2]`)은 보조 기록(병목 사후 분리).
 
 ## 7. 운영
-- 매 거래일 **마감 후 `jongga-forward-eve`**, **익일 시초 후 `jongga-forward-morn`**, **주간 `jongga-forward-report`**(모니터링 전용).
+- 매 거래일 **마감 후 `jongga-forward-eve`**(오늘 선별·기록), **익일(d+1) 마감 후 `jongga-forward-morn`**(전일분 정산 — settle은 d+1 EOD 바의 `open[d+1]`을 읽으므로 d+1 *마감 후* 실행; 매 저녁 eve와 함께 전일분 morn 권장), **주간 `jongga-forward-report`**(모니터링 전용).
 - N≈300 거래일 도달 시 1차 판정 1회.
